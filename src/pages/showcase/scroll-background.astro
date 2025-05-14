@@ -1,0 +1,114 @@
+---
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout>
+  <main>
+    <div id="scroll-container">
+      <div class="content">
+        <div id="progress-indicator">
+          <span id="progress-number">0%</span>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  // GSAPプラグインを登録
+  gsap.registerPlugin(ScrollTrigger);
+
+  // ページ読み込み後に実行
+  document.addEventListener("DOMContentLoaded", () => {
+    const scrollContainer = document.getElementById("scroll-container");
+    const progressNumber = document.getElementById("progress-number");
+
+    // 要素が存在しない場合は処理を終了
+    if (!scrollContainer || !progressNumber) {
+      console.error("Required elements not found");
+      return;
+    }
+
+    // 背景色の変化の設定（開始色から終了色へ）
+    const startColor = { r: 135, g: 206, b: 235 }; // 明るい青色
+    const endColor = { r: 25, g: 25, b: 112 }; // 暗い青色
+
+    // スクロールアニメーションの設定
+    ScrollTrigger.create({
+      trigger: scrollContainer,
+      start: "top top",
+      end: "bottom bottom",
+      scrub: true,
+      onUpdate: (self) => {
+        // 進捗率（0-1）
+        const progress = self.progress;
+
+        // 背景色を計算（開始色と終了色の間で補間）
+        const r = Math.round(
+          startColor.r + (endColor.r - startColor.r) * progress
+        );
+        const g = Math.round(
+          startColor.g + (endColor.g - startColor.g) * progress
+        );
+        const b = Math.round(
+          startColor.b + (endColor.b - startColor.b) * progress
+        );
+        const bgColor = `rgb(${r}, ${g}, ${b})`;
+
+        // 背景色を適用
+        scrollContainer.style.backgroundColor = bgColor;
+
+        // 進捗インジケータを更新（0-100%）
+        const progressPercentage = Math.round(progress * 100);
+        progressNumber.textContent = `${progressPercentage}%`;
+      },
+    });
+  });
+</script>
+
+<style>
+  main {
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  #scroll-container {
+    width: 100%;
+    min-height: 100vh;
+    background-color: rgb(135, 206, 235); /* 初期背景色 */
+    transition: background-color 0.1s ease;
+  }
+
+  .content {
+    max-width: 800px;
+    height: 500vh;
+    margin: 0 auto;
+    padding: 2rem;
+    color: white;
+  }
+
+  #progress-indicator {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    z-index: 10;
+  }
+
+  #progress-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: white;
+  }
+</style>
