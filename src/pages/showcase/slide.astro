@@ -1,0 +1,79 @@
+---
+console.log("This runs in your terminal, not the browser!");
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout>
+  <div class="container">
+    <section class="panel blue">
+      <h1>セクション 1</h1>
+      <p>スクロールして次のセクションへ</p>
+    </section>
+    <section class="panel red">
+      <h1>セクション 2</h1>
+      <p>背景色が変わりました</p>
+    </section>
+    <section class="panel green">
+      <h1>セクション 3</h1>
+      <p>さらに別の背景色</p>
+    </section>
+    <section class="panel purple">
+      <h1>セクション 4</h1>
+      <p>最後のセクション</p>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .container {
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+  }
+
+  .panel {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: sans-serif;
+    color: white;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    scroll-snap-align: start;
+  }
+
+  .blue {
+    background-color: #3498db;
+  }
+
+  .red {
+    background-color: #e74c3c;
+  }
+
+  .green {
+    background-color: #2ecc71;
+  }
+
+  .purple {
+    background-color: #9b59b6;
+  }
+
+  h1 {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    font-size: 1.5rem;
+  }
+</style>
+
+<script>
+  /* not using gsap */
+</script>
