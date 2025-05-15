@@ -1,0 +1,71 @@
+---
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout>
+  <main>
+    <div id="container">
+      <div id="move-bigtext">
+        MOVE BIG TEXT
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import { gsap } from "gsap";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const textElement = document.getElementById("move-bigtext");
+    
+    // 初期位置を画面右外に設定
+    gsap.set(textElement, {
+      x: window.innerWidth,
+      y: 0,
+      bottom: 0,
+    });
+
+    // ウィンドウサイズ変更時にアニメーションをリセット
+    let animation;
+    
+    function createAnimation() {
+      // 既存のアニメーションをキル
+      if (animation) {
+        animation.kill();
+      }
+      
+      // 新しいアニメーションを作成
+      animation = gsap.to(textElement, {
+        x: -textElement.offsetWidth,
+        duration: 15,
+        ease: "linear",
+        repeat: -1,
+        onRepeat: () => {
+          gsap.set(textElement, { x: window.innerWidth });
+        }
+      });
+    }
+    
+    // 初期アニメーション作成
+    createAnimation();
+    
+    // リサイズイベントのリスナー
+    window.addEventListener("resize", createAnimation);
+  });
+</script>
+
+<style>
+  #container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  #move-bigtext {
+    position: absolute;
+    font-size: 200px;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+</style>
